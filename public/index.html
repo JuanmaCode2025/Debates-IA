@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Debate Marvel vs DC</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      width: 700px;
+      max-width: 90%;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #333;
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: linear-gradient(to right, #e52d27, #b31217, #e52d27);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .tema-container {
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    .tema-container input {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+      font-size: 1rem;
+      transition: all 0.3s;
+      background-color: #f8f9fa;
+    }
+
+    .tema-container input:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    }
+
+    #btnIniciar {
+      white-space: nowrap;
+      padding: 0.8rem 1.5rem;
+    }
+
+    .chat {
+      border: 2px solid #e9ecef;
+      border-radius: 12px;
+      padding: 1.5rem;
+      height: 400px;
+      overflow-y: auto;
+      background: #f8f9fa;
+      margin-bottom: 1.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: #007bff #f8f9fa;
+    }
+
+    .chat::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .chat::-webkit-scrollbar-track {
+      background: #f8f9fa;
+      border-radius: 10px;
+    }
+
+    .chat::-webkit-scrollbar-thumb {
+      background-color: #007bff;
+      border-radius: 10px;
+    }
+
+    .mensaje {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .mensaje img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      margin-right: 12px;
+      object-fit: cover;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .mensaje span {
+      background: #e4e4e4;
+      padding: 0.8rem 1.2rem;
+      border-radius: 18px;
+      max-width: 75%;
+      display: inline-block;
+      line-height: 1.4;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+    }
+
+    .mensaje.derecha {
+      flex-direction: row-reverse;
+    }
+
+    .mensaje.derecha img {
+      margin-right: 0;
+      margin-left: 12px;
+    }
+
+    .mensaje.derecha span {
+      background: linear-gradient(135deg, #007bff, #00a1ff);
+      color: white;
+    }
+
+    .botones-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .botones-fila {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .botones-fila button {
+      flex: 1;
+    }
+
+    button {
+      padding: 0.9rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    button:hover::after {
+      opacity: 1;
+    }
+
+    .boton-azul { 
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: white;
+    }
+
+    .boton-rojo { 
+      background: linear-gradient(135deg, #dc3545, #a71d2a);
+      color: white;
+    }
+
+    .boton-verde { 
+      background: linear-gradient(135deg, #28a745, #1e7e34);
+      color: white;
+    }
+
+    .boton-gris { 
+      background: linear-gradient(135deg, #6c757d, #495057);
+      color: white;
+    }
+
+    .boton-naranja { 
+      background: linear-gradient(135deg, #ff9800, #f57c00);
+      color: white;
+    }
+
+    .boton-morado {
+      background: linear-gradient(135deg, #6f42c1, #4a2d80);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Debate Marvel vs DC</h1>
+
+    <div class="tema-container">
+      <input type="text" id="temaInput" placeholder="Introduce el tema del debate (ej: Mejores villanos, Poderes más interesantes, etc.)">
+      <button id="btnIniciar" class="boton-naranja">🚀 Iniciar Debate</button>
+    </div>
+
+    <div class="chat" id="chatContainer">
+      <!-- Mensajes se insertan aquí -->
+    </div>
+
+    <div class="botones-container">
+      <div class="botones-fila">
+        <button id="btnMarvel" class="boton-azul">🦸 Crítico Marvel</button>
+        <button id="btnDC" class="boton-rojo">🦇 Crítico DC</button>
+      </div>
+      
+      <div class="botones-fila">
+        <button id="btnAuto" class="boton-verde">🤖 Debate Automático</button>
+      </div>
+      
+      <div class="botones-fila">
+        <button id="btnLimpiar" class="boton-gris">🧹 Limpiar Historial</button>
+        <button id="btnExportar" class="boton-morado">📄 Exportar PDF</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnMarvel = document.getElementById('btnMarvel');
+      const btnDC = document.getElementById('btnDC');
+      const btnAuto = document.getElementById('btnAuto');
+      const btnLimpiar = document.getElementById('btnLimpiar');
+      const btnIniciar = document.getElementById('btnIniciar');
+      const btnExportar = document.getElementById('btnExportar');
+      const temaInput = document.getElementById('temaInput');
+      const chatContainer = document.getElementById('chatContainer');
+
+      // Cargar historial al iniciar
+      cargarHistorial();
+
+      // Evento para iniciar debate
+      btnIniciar.addEventListener('click', async () => {
+        const tema = temaInput.value.trim();
+        if (!tema) {
+          mostrarError('Por favor ingresa un tema para el debate');
+          return;
+        }
+
+        try {
+          btnIniciar.disabled = true;
+          btnIniciar.textContent = 'Iniciando...';
+
+          const response = await fetch('http://localhost:3000/api/debate/iniciar', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ tema })
+          });
+
+          const data = await response.json();
+          
+          if (!response.ok) {
+            throw new Error(data.mensaje || 'Error al iniciar debate');
+          }
+
+          await cargarHistorial();
+          temaInput.value = '';
+          
+        } catch (error) {
+          mostrarError(error.message);
+        } finally {
+          btnIniciar.disabled = false;
+          btnIniciar.textContent = 'Iniciar Debate';
+        }
+      });
+
+      // Evento para respuesta Marvel
+      btnMarvel.addEventListener('click', async () => {
+        await enviarRespuesta('Marvel');
+      });
+
+      // Evento para respuesta DC
+      btnDC.addEventListener('click', async () => {
+        await enviarRespuesta('DC');
+      });
+
+      // Evento para debate automático
+      btnAuto.addEventListener('click', async () => {
+        try {
+          btnAuto.disabled = true;
+          btnAuto.innerHTML = 'Generando...';
+
+          for (let i = 0; i < 3; i++) {
+            await enviarRespuesta('Marvel');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await enviarRespuesta('DC');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+        } catch (error) {
+          console.error('Error en debate automático:', error);
+          mostrarError(`Error: ${error.message}`);
+        } finally {
+          btnAuto.disabled = false;
+          btnAuto.textContent = 'Debate Automático';
+        }
+      });
+
+      // Evento para limpiar debate
+      btnLimpiar.addEventListener('click', async () => {
+        if (confirm('¿Estás seguro de querer limpiar todo el historial del debate?')) {
+          try {
+            btnLimpiar.disabled = true;
+            btnLimpiar.innerHTML = 'Limpiando...';
+
+            const response = await fetch('http://localhost:3000/api/debate/limpiar', {
+              method: 'DELETE'
+            });
+
+            if (!response.ok) throw new Error('Error al limpiar debate');
+            
+            await cargarHistorial();
+          } catch (error) {
+            console.error('Error:', error);
+            mostrarError(`Error al limpiar debate: ${error.message}`);
+          } finally {
+            btnLimpiar.disabled = false;
+            btnLimpiar.textContent = 'Limpiar Historial';
+          }
+        }
+      });
+
+      // Evento para exportar PDF
+      btnExportar.addEventListener('click', () => {
+        window.open('http://localhost:3000/api/debate/descargar', '_blank');
+      });
+
+      // Función para enviar respuesta
+      async function enviarRespuesta(tipo) {
+        try {
+          const boton = tipo === 'Marvel' ? btnMarvel : btnDC;
+          boton.disabled = true;
+          boton.innerHTML = 'Generando...';
+
+          const response = await fetch(`http://localhost:3000/api/debate/respuesta/${tipo}`, {
+            method: 'POST'
+          });
+
+          if (!response.ok) throw new Error('Error en la respuesta');
+          
+          await cargarHistorial();
+        } catch (error) {
+          console.error('Error:', error);
+          mostrarError(`Error al generar respuesta: ${error.message}`);
+        } finally {
+          const boton = tipo === 'Marvel' ? btnMarvel : btnDC;
+          boton.disabled = false;
+          boton.textContent = tipo === 'Marvel' ? 'Critico Marvel' : 'Critico DC';
+        }
+      }
+
+      // Función para cargar historial
+      async function cargarHistorial() {
+        try {
+          const response = await fetch('http://localhost:3000/api/debate/historial');
+          if (!response.ok) throw new Error('Error al cargar historial');
+          
+          const { datos } = await response.json();
+          renderizarMensajes(datos);
+        } catch (error) {
+          console.error('Error al cargar historial:', error);
+          mostrarError('No se pudo cargar el historial del debate');
+        }
+      }
+
+      // Función para renderizar mensajes
+      function renderizarMensajes(mensajes) {
+  chatContainer.innerHTML = '';
+  
+  if (!mensajes || mensajes.length === 0) {
+    chatContainer.innerHTML = `
+      <div class="mensaje">
+        <span>No hay mensajes en este debate. Introduce un tema para comenzar.</span>
+      </div>
+    `;
+    return;
+  }
+
+  mensajes.forEach(msg => {
+    const mensajeDiv = document.createElement('div');
+    // Modificado: DC a la izquierda y Marvel a la derecha 
+    mensajeDiv.className = `mensaje ${msg.participante === 'Marvel' ? 'derecha' : ''}`;
+    
+    const avatar = document.createElement('img');
+    avatar.src = msg.participante === 'Marvel' ? 
+      'https://wallpapers.com/images/featured/logo-de-marvel-3p16v5avq80km4ns.jpg' :
+      msg.participante === 'DC' ?
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/DC_Comics_logo.svg/2048px-DC_Comics_logo.svg.png' :
+      'https://e7.pngegg.com/pngimages/937/167/png-clipart-club-penguin-island-foruma-moderators-wikia-donate-game-animals-thumbnail.png';
+    
+    const contenido = document.createElement('span');
+    contenido.textContent = msg.mensaje;
+    
+    mensajeDiv.appendChild(avatar);
+    mensajeDiv.appendChild(contenido);
+    chatContainer.appendChild(mensajeDiv);
+  });
+
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+      // Función para mostrar errores
+      function mostrarError(mensaje) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'mensaje';
+        errorDiv.innerHTML = `<span style="color: red">${mensaje}</span>`;
+        chatContainer.appendChild(errorDiv);
+      }
+    });
+  </script>
+
+</html>
